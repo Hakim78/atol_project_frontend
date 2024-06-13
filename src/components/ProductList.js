@@ -19,7 +19,7 @@ const ProductList = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get('/api/products');
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/products`);
       setProducts(response.data);
       if (response.data.length > 0) {
         setActiveProduct(response.data[0]);
@@ -31,7 +31,7 @@ const ProductList = () => {
 
   const addProduct = async (newProduct) => {
     try {
-      await axios.post('/api/products', newProduct);
+      await axios.post(`${process.env.REACT_APP_API_URL}/products`, newProduct);
       fetchProducts();
       setShowAddForm(false);
     } catch (error) {
@@ -41,7 +41,7 @@ const ProductList = () => {
 
   const updateProduct = async (updatedProduct) => {
     try {
-      await axios.put(`/api/products/${updatedProduct._id}`, updatedProduct);
+      await axios.put(`${process.env.REACT_APP_API_URL}/products/${updatedProduct._id}`, updatedProduct);
       fetchProducts();
       setShowEditForm(false);
       setProductToEdit(null);
@@ -52,7 +52,7 @@ const ProductList = () => {
 
   const deleteProduct = async (id) => {
     try {
-      await axios.delete(`/api/products/${id}`);
+      await axios.delete(`${process.env.REACT_APP_API_URL}/products/${id}`);
       fetchProducts();
     } catch (error) {
       console.error('Error deleting product:', error);
@@ -69,30 +69,30 @@ const ProductList = () => {
   };
 
   return (
-    <div className="container mx-auto p-6 max-w-screen-lg bg-white shadow-lg rounded-lg">
-      <h1 className="text-3xl font-bold mb-6">Liste des produits</h1>
-      <div className="flex justify-end mb-6">
+    <div className="container mx-auto p-4 max-w-screen-lg">
+      <h1 className="text-2xl font-bold mb-4">Liste des produits</h1>
+      <div className="flex justify-end mb-4">
         <button
-          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded flex items-center"
+          className="bg-blue-500 text-white px-4 py-2 rounded flex items-center"
           onClick={() => setShowAddForm(true)}
         >
           <FaPlus className="mr-2" /> Ajouter un produit
         </button>
       </div>
       {products.length === 0 ? (
-        <p className="text-gray-500">Aucun produit disponible.</p>
+        <p>Aucun produit disponible.</p>
       ) : (
-        <div className="flex flex-col space-y-6">
-          <div className="flex space-x-6">
+        <div className="flex flex-col space-y-4">
+          <div className="flex space-x-4">
             <div className="flex-1">
-              <div className="w-full max-w-lg mx-auto">
+              <div className="w-full max-w-lg mx-auto"> {/* Adjust the width here */}
                 <Slider {...settings} className="w-full h-full">
                   {products.map((product) => (
                     <div key={product._id} className="relative">
-                      <img src={`http://localhost:5000/${product.imageUrl}`} alt={product.model} className="mx-auto h-64 object-cover rounded-lg shadow-md" />
+                      <img src={`/assets/${product.imageUrl}`} alt={product.model} className="mx-auto h-64" />
                       <div className="absolute top-0 right-0 flex space-x-2 p-2">
                         <button
-                          className="bg-yellow-500 hover:bg-yellow-600 text-white p-2 rounded"
+                          className="bg-yellow-500 text-white p-2 rounded"
                           onClick={() => {
                             setProductToEdit(product);
                             setShowEditForm(true);
@@ -101,7 +101,7 @@ const ProductList = () => {
                           <FaEdit />
                         </button>
                         <button
-                          className="bg-red-600 hover:bg-red-700 text-white p-2 rounded"
+                          className="bg-red-500 text-white p-2 rounded"
                           onClick={() => deleteProduct(product._id)}
                         >
                           <FaTrash />
@@ -113,8 +113,8 @@ const ProductList = () => {
               </div>
             </div>
             {activeProduct && (
-              <div className="flex-1 p-6 bg-gray-100 rounded-lg shadow-md">
-                <h2 className="text-xl font-bold mb-4">{activeProduct.model}</h2>
+              <div className="flex-1 p-4 bg-gray-100 rounded">
+                <h2 className="text-xl font-bold">{activeProduct.model}</h2>
                 <p><strong>Marque :</strong> {activeProduct.brand}</p>
                 <p><strong>Fabriqué en France :</strong> {activeProduct.madeInFrance ? 'Oui' : 'Non'}</p>
                 <p><strong>Genre :</strong> {activeProduct.gender}</p>
