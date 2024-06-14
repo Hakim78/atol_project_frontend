@@ -89,7 +89,7 @@ const ProductList = () => {
                 <Slider {...settings} className="w-full h-full">
                   {products.map((product) => (
                     <div key={product._id} className="relative">
-                      <img src={`/assets/${product.imageUrl}`} alt={product.model} className="mx-auto h-64" />
+                      <img src={`${process.env.REACT_APP_API_URL}/assets/${product.imageUrl}`} alt={product.model} className="mx-auto h-64" />
                       <div className="absolute top-0 right-0 flex space-x-2 p-2">
                         <button
                           className="bg-yellow-500 text-white p-2 rounded"
